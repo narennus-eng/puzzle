@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 5.34 Plan</title>
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#0f172a;
+  color:white;
+  text-align:center;
+}
+.section {
+  display:none;
+  padding:40px 20px;
+  min-height:100vh;
+}
+.active { display:block; }
+input {
+  padding:8px;
+  margin:8px;
+  border-radius:6px;
+  border:none;
+  width:140px;
+}
+button {
+  padding:10px 20px;
+  margin:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.green { background:#22c55e; color:white; }
+.red { background:#ef4444; color:white; }
+canvas {
+  background:white;
+  margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div id="page1" class="section active">
+<h2>The Long-Term Plan</h2>
+<p>We have savings of <b>332,000 SGD</b> at year 7.<br>
+We invest at <b>8%</b> annually.<br>
+We save <b>132,000 SGD</b> per year thereafter.<br><br>
+Ignoring inflation, how much will we have after <b>23.4 years</b>?</p>
+
+<p>Formula:</p>
+<p>FV = P(1+r)<sup>t</sup> + C((1+r)<sup>t</sup> − 1)/r</p>
+
+<div>
+<input id="P" placeholder="P">
+<input id="r" placeholder="r">
+<input id="t" placeholder="t">
+<input id="C" placeholder="C">
+</div>
+
+<button onclick="checkFV()">Compute</button>
+<p id="result"></p>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="section">
+<h2>5.34 Million SGD 😌</h2>
+<p>Damn. We'll reach a net worth of at least <b>5.34 million</b> in just 23 years.</p>
+<p>Luxury villas in Singapore? ~3 million.<br>
+Ferraris? ~1.5 million.<br>
+Luxurious retirement for 20 years? ~2 million.</p>
+<p><b>So woman, get geared up.<br>
+We're on the right path.<br>
+By 50, we'll definitely be RICH.</b></p>
+<p>YOU'RE DOING GREAT. KEEP GOING.</p>
+
+<button onclick="goToPage3()">Next</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="page3" class="section">
+<h2>Another Fact...</h2>
+<p>5.34 units is also the numerical approximation of the area enclosed by:</p>
+<p>(x² + y² − 1)³ − x²y³ = 0</p>
+<p>Wanna see how this curve looks?</p>
+<button onclick="startHeart()" class="green">Yes</button>
+</div>
+
+<!-- PAGE 4 -->
+<div id="page4" class="section">
+<canvas id="heartCanvas" width="600" height="600"></canvas>
+<h2 id="valText" style="display:none;">WILL YOU BE MY VALENTINE?</h2>
+<div id="yesButtons" style="display:none;">
+<button class="green">YES</button>
+<button class="red">YES</button>
+</div>
+</div>
+
+<script>
+function checkFV() {
+  const P = parseFloat(document.getElementById('P').value);
+  const r = parseFloat(document.getElementById('r').value);
+  const t = parseFloat(document.getElementById('t').value);
+  const C = parseFloat(document.getElementById('C').value);
+
+  const FV = P*Math.pow(1+r,t) + C*((Math.pow(1+r,t)-1)/r);
+
+  if(FV > 5300000 && FV < 5500000) {
+    document.getElementById('page1').classList.remove('active');
+    document.getElementById('page2').classList.add('active');
+  } else {
+    document.getElementById('result').innerText = "Check your numbers 😉";
+  }
+}
+
+function goToPage3() {
+  document.getElementById('page2').classList.remove('active');
+  document.getElementById('page3').classList.add('active');
+}
+
+function startHeart() {
+  document.getElementById('page3').classList.remove('active');
+  document.getElementById('page4').classList.add('active');
+  drawHeart();
+}
+
+function drawHeart() {
+  const canvas = document.getElementById('heartCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.translate(300,300);
+  ctx.scale(20,-20);
+  ctx.lineWidth = 0.05;
+  ctx.strokeStyle = "red";
+
+  let t = 0;
+  function animate() {
+    ctx.beginPath();
+    for(let i=0; i<t; i+=0.01) {
+      const x = 16*Math.pow(Math.sin(i),3);
+      const y = 13*Math.cos(i)-5*Math.cos(2*i)-2*Math.cos(3*i)-Math.cos(4*i);
+      if(i===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    t += 0.05;
+    if(t <= Math.PI*2) {
+      requestAnimationFrame(animate);
+    } else {
+      document.getElementById('valText').style.display='block';
+      document.getElementById('yesButtons').style.display='block';
+    }
+  }
+  animate();
+}
+</script>
+
+</body>
+</html>
