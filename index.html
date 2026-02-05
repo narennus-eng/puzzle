@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The 5.34 Plan</title>
+<title>The Puzzle💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <style>
 body {
   margin:0;
-  font-family: Arial, sans-serif;
-  background:#0f172a;
-  color:white;
+  font-family:'Poppins', sans-serif;
+  background:linear-gradient(135deg,#ffd6e8,#ffe5b4);
+  color:#6b2147;
   text-align:center;
 }
 .section {
@@ -19,25 +21,26 @@ body {
 }
 .active { display:block; }
 input {
-  padding:8px;
-  margin:8px;
+  padding:6px;
+  margin:4px;
   border-radius:6px;
-  border:none;
-  width:140px;
+  border:1px solid #ff9ecf;
+  width:90px;
+  text-align:center;
 }
 button {
   padding:10px 20px;
   margin:10px;
   border:none;
-  border-radius:8px;
+  border-radius:20px;
   cursor:pointer;
-  font-weight:bold;
+  font-weight:600;
 }
 .green { background:#22c55e; color:white; }
 .red { background:#ef4444; color:white; }
 canvas {
   background:white;
-  margin-top:20px;
+  border-radius:20px;
 }
 </style>
 </head>
@@ -45,20 +48,26 @@ canvas {
 
 <!-- PAGE 1 -->
 <div id="page1" class="section active">
-<h2>The Long-Term Plan</h2>
+<h2>The Long-Term Plan 💼</h2>
 <p>We have savings of <b>332,000 SGD</b> at year 7.<br>
 We invest at <b>8%</b> annually.<br>
 We save <b>132,000 SGD</b> per year thereafter.<br><br>
-Ignoring inflation, how much will we have after <b>23.4 years</b>?</p>
+Ignoring inflation, how much will we have after <b>23.36 years</b>?</p>
 
-<p>Formula:</p>
-<p>FV = P(1+r)<sup>t</sup> + C((1+r)<sup>t</sup> − 1)/r</p>
+<p>Fill in the formula:</p>
+
+<p>
+\[
+FV = \underline{\hspace{1cm}} (1+ \underline{\hspace{0.5cm}})^{\underline{\hspace{0.5cm}}} +
+\underline{\hspace{1cm}} \frac{(1+ \underline{\hspace{0.5cm}})^{\underline{\hspace{0.5cm}}} -1}{\underline{\hspace{0.5cm}}}
+\]
+</p>
 
 <div>
-<input id="P" placeholder="P">
-<input id="r" placeholder="r">
-<input id="t" placeholder="t">
-<input id="C" placeholder="C">
+<input id="P" placeholder="332000">
+<input id="r" placeholder="0.08">
+<input id="t" placeholder="16.36">
+<input id="C" placeholder="132000">
 </div>
 
 <button onclick="checkFV()">Compute</button>
@@ -82,9 +91,9 @@ By 50, we'll definitely be RICH.</b></p>
 
 <!-- PAGE 3 -->
 <div id="page3" class="section">
-<h2>Another Fact...</h2>
+<h2>Another Fact... ❤️</h2>
 <p>5.34 units is also the numerical approximation of the area enclosed by:</p>
-<p>(x² + y² − 1)³ − x²y³ = 0</p>
+<p>\[(x^2 + y^2 - 1)^3 - x^2 y^3 = 0\]</p>
 <p>Wanna see how this curve looks?</p>
 <button onclick="startHeart()" class="green">Yes</button>
 </div>
@@ -92,11 +101,16 @@ By 50, we'll definitely be RICH.</b></p>
 <!-- PAGE 4 -->
 <div id="page4" class="section">
 <canvas id="heartCanvas" width="600" height="600"></canvas>
-<h2 id="valText" style="display:none;">WILL YOU BE MY VALENTINE?</h2>
-<div id="yesButtons" style="display:none;">
-<button class="green">YES</button>
-<button class="red">YES</button>
+<div id="insideText" style="display:none; position:relative; margin-top:-350px;">
+<h2 style="color:#c9184a;">WILL YOU BE MY VALENTINE?</h2>
+<button class="green" onclick="goToFinal()">YES</button>
+<button class="red" onclick="goToFinal()">YES</button>
 </div>
+</div>
+
+<!-- FINAL PAGE -->
+<div id="final" class="section">
+<h1>YAYYYYY!!!!!! 🎉💖</h1>
 </div>
 
 <script>
@@ -124,36 +138,58 @@ function goToPage3() {
 function startHeart() {
   document.getElementById('page3').classList.remove('active');
   document.getElementById('page4').classList.add('active');
-  drawHeart();
+  drawGraphHeart();
 }
 
-function drawHeart() {
+function drawGraphHeart() {
   const canvas = document.getElementById('heartCanvas');
   const ctx = canvas.getContext('2d');
-  ctx.translate(300,300);
-  ctx.scale(20,-20);
-  ctx.lineWidth = 0.05;
-  ctx.strokeStyle = "red";
 
   let t = 0;
-  function animate() {
+
+  function drawFrame(){
+    ctx.clearRect(0,0,600,600);
+
+    // draw grid
+    ctx.save();
+    ctx.strokeStyle="#eee";
+    for(let i=0;i<=600;i+=50){
+      ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,600); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(600,i); ctx.stroke();
+    }
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(300,300);
+    ctx.scale(20,-20);
+    ctx.strokeStyle="red";
+    ctx.lineWidth=0.08;
+
     ctx.beginPath();
-    for(let i=0; i<t; i+=0.01) {
-      const x = 16*Math.pow(Math.sin(i),3);
-      const y = 13*Math.cos(i)-5*Math.cos(2*i)-2*Math.cos(3*i)-Math.cos(4*i);
+    for(let i=0;i<=t;i+=0.01){
+      const x=16*Math.pow(Math.sin(i),3);
+      const y=13*Math.cos(i)-5*Math.cos(2*i)-2*Math.cos(3*i)-Math.cos(4*i);
       if(i===0) ctx.moveTo(x,y);
       else ctx.lineTo(x,y);
     }
     ctx.stroke();
-    t += 0.05;
-    if(t <= Math.PI*2) {
-      requestAnimationFrame(animate);
+    ctx.restore();
+
+    t += 0.015; // slower tracing speed
+
+    if(t <= Math.PI*2){
+      requestAnimationFrame(drawFrame);
     } else {
-      document.getElementById('valText').style.display='block';
-      document.getElementById('yesButtons').style.display='block';
+      document.getElementById('insideText').style.display='block';
     }
   }
-  animate();
+
+  drawFrame();
+}
+
+function goToFinal(){
+  document.getElementById('page4').classList.remove('active');
+  document.getElementById('final').classList.add('active');
 }
 </script>
 
